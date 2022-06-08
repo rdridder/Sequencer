@@ -84,7 +84,7 @@ void Sequencer::callBack() {
   }
 }
 
-Sequencer::init() {
+void Sequencer::init() {
   instance = this;
 
   // Calculate the correct settings for the compare match register
@@ -105,7 +105,7 @@ Sequencer::init() {
 
   // Set up interrupt routine
   noInterrupts();
-d  TCCR3A = 0;
+  TCCR3A = 0;
   TCCR3B = 0;
   TCNT3  = 0;
   OCR3A = _prescalerCompare;  // compare match register 16MHz/256/2Hz

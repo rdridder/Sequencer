@@ -12,7 +12,7 @@ class Sequencer
 {
   public:
     Sequencer(unsigned int bpm, bool *updateUI);
-    init();
+    void init();
     void setTempo(unsigned int bpm);
     void setMode(uint8_t mode);
     bool setMidiNote(uint8_t note);
