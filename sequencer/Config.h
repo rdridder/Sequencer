@@ -1,0 +1,8 @@
+#pragma once
+
+#define NUMBOARDS 1
+#define NUM_ENCODERS NUMBOARDS * 8 + 1
+#define ENCODER_POLL_INTERVAL_MS 5
+
+
+#define I2C_SPEED 400000

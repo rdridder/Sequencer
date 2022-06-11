@@ -33,4 +33,6 @@
 /hardwaretest/__vm
 /hardwaretest/.vs
 /hardwaretest/*.user
-/hardwaretest/*.filters
+/sequencer/.vs
+/sequencer/__vm
+/sequencer/*.user
