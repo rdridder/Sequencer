@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+/hardwaretest/__vm
+/hardwaretest/.vs
+/hardwaretest/*.user
+/hardwaretest/*.filters
