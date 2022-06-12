@@ -36,6 +36,9 @@
     <ClInclude Include="LedController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SequencerEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RotaryEncoderController.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LedController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SequencerEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

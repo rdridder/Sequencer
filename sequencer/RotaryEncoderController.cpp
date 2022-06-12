@@ -14,16 +14,17 @@ RotaryEncoderController::RotaryEncoderController(void (*callbackMethodArg)(int e
 	callbackMethod = callbackMethodArg;
 }
 
-void RotaryEncoderController::tick(long currentMillis) {
-	if (currentMillis - _previousMillis >= ENCODER_POLL_INTERVAL_MS) {	
-		_previousMillis = currentMillis;
-		for (int i = 0; i < NUM_ENCODERS; i++) {
-			_encoders[i]->tick();
-			long newPos = _encoders[i]->getPosition();
-			if (_positions[i] != newPos) {
-				_positions[i] = newPos;
-				callbackMethod(i, newPos);
-			}
+void RotaryEncoderController::tick(unsigned long currentMillis) {
+	if (currentMillis - _previousMillis < ENCODER_POLL_INTERVAL_MS) {
+		return;
+	}
+	_previousMillis = currentMillis;
+	for (int i = 0; i < NUM_ENCODERS; i++) {
+		_encoders[i]->tick();
+		long newPos = _encoders[i]->getPosition();
+		if (_positions[i] != newPos) {
+			_positions[i] = newPos;
+			callbackMethod(i, newPos);
 		}
 	}
 }

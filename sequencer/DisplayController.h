@@ -14,6 +14,9 @@ class DisplayController
 {
 	public:
 		DisplayController();
+		void printStartMenu();
+		void flipMenu();
+
 		void printEncoderValues(int encoderIndex, long encoderValue);
 		void printButtonValues(unsigned long buttonValues);
 		void setup();
@@ -22,6 +25,10 @@ class DisplayController
 
 	private:
 		Adafruit_SSD1306 *_display;
+		char *menuItems[22] = {"start sequencer      ", "stop sequencer      "};
+		bool _isFlipped = false;
+
+
 };
 
 #endif

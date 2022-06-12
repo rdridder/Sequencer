@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{168cbdd5-a5e3-41cf-95e4-aa0e22b46040}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\MemoryUsage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\MemoryUsage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+<Text Include="$(MSBuildThisFileDirectory)library.properties" />
+<Text Include="$(MSBuildThisFileDirectory)WhatsNew.TXT" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" />
+<None Include="$(MSBuildThisFileDirectory)MakeDoc.bat" />
+<None Include="$(MSBuildThisFileDirectory)MakeLibrary.bat" />
+<None Include="$(MSBuildThisFileDirectory)MakeTests.bat" />
+<None Include="$(MSBuildThisFileDirectory)MemoryUsage.zip" />
+<None Include="$(MSBuildThisFileDirectory)README.adoc" />
+<None Include="$(MSBuildThisFileDirectory)StartDoc.bat" />
+<None Include="$(MSBuildThisFileDirectory)testSamples.log" />
+  </ItemGroup>
+</Project>

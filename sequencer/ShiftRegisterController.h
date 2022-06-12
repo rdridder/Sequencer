@@ -12,7 +12,7 @@ class ShiftRegisterController
 {
 	public:
 		ShiftRegisterController(void (*callbackMethodArg)(unsigned long buttonValues));
-		void tick(long currentMillis);
+		void tick(unsigned long currentMillis);
 		void setup();
 
 	protected:

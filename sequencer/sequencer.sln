@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sequencer", "sequencer.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_SSD1306-2.4.3", "Libraries\Adafruit_SSD1306\2.4.3\Adafruit_SSD1306\Adafruit_SSD1306-2.4.3.vcxitems", "{FABCC9EF-AF8A-408A-9A8E-EA8C4B3E840D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ezButton-1.0.3", "Libraries\ezButton\1.0.3\ezButton\ezButton-1.0.3.vcxitems", "{F14B5357-8523-4C6C-BE61-D57E7276D13E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MemoryUsage-2.21.1", "Libraries\MemoryUsage\2.21.1\MemoryUsage\MemoryUsage-2.21.1.vcxitems", "{168CBDD5-A5E3-41CF-95E4-AA0E22B46040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,7 +29,11 @@ Global
 		SolutionGuid = {6F82D348-C65E-4C72-91D4-19FA7F5271CD}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Libraries\MemoryUsage\2.21.1\MemoryUsage\MemoryUsage-2.21.1.vcxitems*{168cbdd5-a5e3-41cf-95e4-aa0e22b46040}*SharedItemsImports = 9
 		Libraries\Adafruit_SSD1306\2.4.3\Adafruit_SSD1306\Adafruit_SSD1306-2.4.3.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\ezButton\1.0.3\ezButton\ezButton-1.0.3.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\MemoryUsage\2.21.1\MemoryUsage\MemoryUsage-2.21.1.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\ezButton\1.0.3\ezButton\ezButton-1.0.3.vcxitems*{f14b5357-8523-4c6c-be61-d57e7276d13e}*SharedItemsImports = 9
 		Libraries\Adafruit_SSD1306\2.4.3\Adafruit_SSD1306\Adafruit_SSD1306-2.4.3.vcxitems*{fabcc9ef-af8a-408a-9a8e-ea8c4b3e840d}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

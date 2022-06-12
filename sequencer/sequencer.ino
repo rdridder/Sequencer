@@ -1,17 +1,21 @@
+#include <MemoryUsage.h>
+#include "ezButton.h"
+#include "SequencerEngine.h"
 #include "LedController.h"
-#include <splash.h>
 #include "DisplayController.h"
 #include "ShiftRegisterController.h"
 #include "RotaryEncoderController.h"
 #include <Wire.h>
 #include "Config.h"
 
+
 RotaryEncoderController *rotaryEncoderController;
 ShiftRegisterController *shiftRegisterController;
 DisplayController *displayController;
 LedController *ledController;
 
-unsigned long currentMillis;
+ezButton button(4);
+
 
 void setup() {
 	Serial.begin(115200);
@@ -30,13 +34,35 @@ void setup() {
 	displayController->setup();
 	ledController->setup();
 
-	Serial.println("setup done");
+	// Start with the starting UI
+	displayController->printStartMenu();
 }
 
+unsigned long _previousMillis = 0;
+
 void loop() {
-	currentMillis = millis();
+	unsigned long currentMillis = millis();
 	rotaryEncoderController->tick(currentMillis);
 	shiftRegisterController->tick(currentMillis);
+	
+	
+	button.loop();
+
+	if (button.isPressed()) {
+		displayController->flipMenu();
+	}
+
+
+
+	
+	if (currentMillis - _previousMillis >= 2000) {
+		_previousMillis = currentMillis;
+		FREERAM_PRINT;
+	}
+	
+
+	
+
 }
 
 void rotaryEncoderCallback(int encoderIndex, long encoderValue) {

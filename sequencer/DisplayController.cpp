@@ -11,10 +11,21 @@ void DisplayController::setup() {
 	_display->setTextColor(SSD1306_WHITE);
 	_display->setCursor(0, 0);
 	_display->display();
-	_display->println("setup");
-	_display->display();
-	delay(1000);
+}
+
+void DisplayController::flipMenu() {
+	_isFlipped = !_isFlipped;
+	printStartMenu();
+}
+
+void DisplayController::printStartMenu() {
+	int index = 0;
+	if (_isFlipped) {
+		index = 1;
+	}
 	_display->clearDisplay();
+	_display->setCursor(0, 0);
+	_display->println(menuItems[index]);
 	_display->display();
 }
 
