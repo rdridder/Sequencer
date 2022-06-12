@@ -1,8 +1,16 @@
-#include "InputController.h"
+#include "LedController.h"
+#include <splash.h>
+#include "DisplayController.h"
+#include "ShiftRegisterController.h"
+#include "RotaryEncoderController.h"
 #include <Wire.h>
 #include "Config.h"
 
-InputController *inputController;
+RotaryEncoderController *rotaryEncoderController;
+ShiftRegisterController *shiftRegisterController;
+DisplayController *displayController;
+LedController *ledController;
+
 unsigned long currentMillis;
 
 void setup() {
@@ -10,18 +18,32 @@ void setup() {
 
 	// Set I2C speed
 	Wire.setClock(I2C_SPEED);
+	
+	// Initialize controllers
+	rotaryEncoderController = new RotaryEncoderController(&rotaryEncoderCallback);
+	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
+	displayController = new DisplayController();
+	ledController = new LedController();
 
-	inputController = new InputController(&callback);
+	// Setup controllers
+	shiftRegisterController->setup();
+	displayController->setup();
+	ledController->setup();
 
+	Serial.println("setup done");
 }
 
 void loop() {
 	currentMillis = millis();
-	inputController->tick(currentMillis);
+	rotaryEncoderController->tick(currentMillis);
+	shiftRegisterController->tick(currentMillis);
 }
 
-void callback(int encoderIndex, long encoderValue) {
-	Serial.print(encoderIndex);
-	Serial.print(" - ");
-	Serial.println(encoderValue);
+void rotaryEncoderCallback(int encoderIndex, long encoderValue) {
+	displayController->printEncoderValues(encoderIndex, encoderValue);
+}
+
+void buttonCallback(unsigned long buttonValues) {
+	displayController->printButtonValues(buttonValues);
+	ledController->setLedState(buttonValues);
 }
