@@ -16,7 +16,7 @@
 class SequencerEngine
 {
 public:
-    SequencerEngine(unsigned int bpm, bool* updateUI);
+    SequencerEngine(unsigned int bpm, volatile bool* updateUI);
     void init();
     void setTempo(unsigned int bpm);
     void setMode(uint8_t mode);
@@ -33,7 +33,7 @@ public:
 
 private:
     uint8_t bank1[16] = { 32,0,32,0,32,0,32,0,32,0,32,0,32,0,32,0 };
-    bool* _updateUI;
+    volatile bool* _updateUI;
     volatile bool _checkMidi;
 
     uint8_t _midiData[3] = { 0, 0, 0 };

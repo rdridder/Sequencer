@@ -13,20 +13,25 @@ void DisplayController::setup() {
 	_display->display();
 }
 
-void DisplayController::flipMenu() {
-	_isFlipped = !_isFlipped;
-	printStartMenu();
-}
-
-void DisplayController::printStartMenu() {
-	int index = 0;
-	if (_isFlipped) {
-		index = 1;
-	}
+void DisplayController::startDisplayOutput() {
 	_display->clearDisplay();
 	_display->setCursor(0, 0);
-	_display->println(menuItems[index]);
+}
+
+void DisplayController::stopDisplayOutput() {
 	_display->display();
+}
+
+void DisplayController::printMenuLine(char menuLine[21]) {
+	menuLine[20] = ' ';
+	_display->println(menuLine);
+}
+
+void DisplayController::printActiveMenuLine(char menuLine[21]) {
+	menuLine[20] = '<';
+	//_display->setTextColor(BLACK, WHITE); // crashes after a while
+	_display->println(menuLine);
+	//_display->setTextColor(WHITE, BLACK);
 }
 
 void DisplayController::printEncoderValues(int encoderIndex, long encoderValue) {

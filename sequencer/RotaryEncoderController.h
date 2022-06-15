@@ -12,7 +12,7 @@
 class RotaryEncoderController
 {
 	public:
-		RotaryEncoderController(void (*callbackMethodArg)(int encoderIndex, long encoderValue));
+		RotaryEncoderController(void (*callbackMethodArg)(int encoderIndex, long encoderValue, int direction));
 		void tick(unsigned long currentMillis);
 
 	protected:
@@ -21,7 +21,7 @@ class RotaryEncoderController
 		RotaryEncoder* _encoders[NUM_ENCODERS];
 		long _previousMillis = 0;
 		long _positions[NUM_ENCODERS] = { 0 };
-		void (*callbackMethod)(int encoderIndex, long encoderValue);
+		void (*callbackMethod)(int encoderIndex, long encoderValue, int direction);
 		RotaryEncoder _encoder1 = RotaryEncoder(52, 50, RotaryEncoder::LatchMode::FOUR0);
 		RotaryEncoder _encoder2 = RotaryEncoder(48, 46, RotaryEncoder::LatchMode::FOUR0);
 		RotaryEncoder _encoder3 = RotaryEncoder(44, 42, RotaryEncoder::LatchMode::FOUR0);

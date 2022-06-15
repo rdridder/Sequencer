@@ -1,6 +1,7 @@
+#include "MenuController.h"
 #include <MemoryUsage.h>
 #include "ezButton.h"
-#include "SequencerEngine.h"
+//#include "SequencerEngine.h"
 #include "LedController.h"
 #include "DisplayController.h"
 #include "ShiftRegisterController.h"
@@ -13,9 +14,10 @@ RotaryEncoderController *rotaryEncoderController;
 ShiftRegisterController *shiftRegisterController;
 DisplayController *displayController;
 LedController *ledController;
+//SequencerEngine *sequencerEngine;
+MenuController *menuController;
 
 ezButton button(4);
-
 
 void setup() {
 	Serial.begin(115200);
@@ -28,6 +30,8 @@ void setup() {
 	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
 	displayController = new DisplayController();
 	ledController = new LedController();
+	//sequencerEngine = new SequencerEngine(120, &updateUI);
+	menuController = new MenuController(displayController);
 
 	// Setup controllers
 	shiftRegisterController->setup();
@@ -35,7 +39,7 @@ void setup() {
 	ledController->setup();
 
 	// Start with the starting UI
-	displayController->printStartMenu();
+	menuController->startMenu();
 }
 
 unsigned long _previousMillis = 0;
@@ -45,28 +49,33 @@ void loop() {
 	rotaryEncoderController->tick(currentMillis);
 	shiftRegisterController->tick(currentMillis);
 	
-	
 	button.loop();
-
 	if (button.isPressed()) {
-		displayController->flipMenu();
+		rotaryMainButtonCallback();
 	}
 
-
-
-	
-	if (currentMillis - _previousMillis >= 2000) {
-		_previousMillis = currentMillis;
-		FREERAM_PRINT;
-	}
-	
-
-	
-
+	//if (currentMillis - _previousMillis >= 2000) {
+	//	_previousMillis = currentMillis;
+	//	FREERAM_PRINT;
+	//}
 }
 
-void rotaryEncoderCallback(int encoderIndex, long encoderValue) {
-	displayController->printEncoderValues(encoderIndex, encoderValue);
+void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
+	if (NUM_ENCODERS - 1 == encoderIndex) {
+		if (direction < 0) {
+			menuController->cycleMenuMin();
+		}
+		else {
+			menuController->cycleMenuPlus();
+		}
+	}
+	else {
+		displayController->printEncoderValues(encoderIndex, encoderValue);
+	}
+}
+
+void rotaryMainButtonCallback() {
+	menuController->clickMenu();
 }
 
 void buttonCallback(unsigned long buttonValues) {

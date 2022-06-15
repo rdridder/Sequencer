@@ -11,7 +11,7 @@ ISR(TIMER3_COMPA_vect)          // timer compare interrupt service routine
 // Eighth note is half a quarter note.
 // Sixteenth note is half an eight note.
 
-SequencerEngine::SequencerEngine(unsigned int bpm, bool* updateUI)
+SequencerEngine::SequencerEngine(unsigned int bpm, volatile bool* updateUI)
 {
     _bpm = bpm;
     _tick = 1;

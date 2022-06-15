@@ -1,6 +1,6 @@
 #include "RotaryEncoderController.h"
 
-RotaryEncoderController::RotaryEncoderController(void (*callbackMethodArg)(int encoderIndex, long encoderValue))
+RotaryEncoderController::RotaryEncoderController(void (*callbackMethodArg)(int encoderIndex, long encoderValue, int direction))
 {
 	_encoders[0] = &_encoder1;
 	_encoders[1] = &_encoder2;
@@ -24,7 +24,8 @@ void RotaryEncoderController::tick(unsigned long currentMillis) {
 		long newPos = _encoders[i]->getPosition();
 		if (_positions[i] != newPos) {
 			_positions[i] = newPos;
-			callbackMethod(i, newPos);
+			int direction = (int)_encoders[i]->getDirection();
+			callbackMethod(i, newPos, direction);
 		}
 	}
 }
