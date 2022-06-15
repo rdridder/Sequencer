@@ -1,7 +1,7 @@
 #include "MenuController.h"
 #include <MemoryUsage.h>
 #include "ezButton.h"
-//#include "SequencerEngine.h"
+#include "SequencerEngine.h"
 #include "LedController.h"
 #include "DisplayController.h"
 #include "ShiftRegisterController.h"
@@ -14,10 +14,12 @@ RotaryEncoderController *rotaryEncoderController;
 ShiftRegisterController *shiftRegisterController;
 DisplayController *displayController;
 LedController *ledController;
-//SequencerEngine *sequencerEngine;
+SequencerEngine *sequencerEngine;
 MenuController *menuController;
 
 ezButton button(4);
+
+volatile bool updateUI = false;
 
 void setup() {
 	Serial.begin(115200);
@@ -30,8 +32,8 @@ void setup() {
 	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
 	displayController = new DisplayController();
 	ledController = new LedController();
-	//sequencerEngine = new SequencerEngine(120, &updateUI);
-	menuController = new MenuController(displayController);
+	sequencerEngine = new SequencerEngine(120, &updateUI);
+	menuController = new MenuController(displayController, sequencerEngine);
 
 	// Setup controllers
 	shiftRegisterController->setup();

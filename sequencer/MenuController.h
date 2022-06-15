@@ -7,23 +7,33 @@
 	#include "WProgram.h"
 #endif
 #include "DisplayController.h";
+#include "SequencerEngine.h";
 
 class MenuController
 {
 	public:
-		MenuController(DisplayController *displayController);
+		MenuController(DisplayController *displayController, SequencerEngine *sequencerEngine);
 		void startMenu();
 		void clickMenu();
 		void cycleMenuPlus();
 		void cycleMenuMin();
+		void cycleActiveMenuMin();
+		void cycleActiveMenuPlus();
 
 	protected:
 
 	private:
 		DisplayController* _displayController;
-		char* _menuItems[21] = { "start sequencer      ", "stop sequencer       "};
+		SequencerEngine* _sequencerEngine;
+		char _started[8] = "started";
+		char _stopped[8] = "stopped";
+		char* _menuItems[21] = { "started              ", "set bpm              "};
 		uint8_t _numberOfMenuItems = 2;
-		int8_t _activeItem = 0;
+		int8_t _activeIndex = 0;
+		bool _isStarted = false;
+		bool _itemActive = true;
+		void handleStart();
+		void manipulateStartStopLine(char characters[8]);
 };
 
 

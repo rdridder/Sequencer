@@ -31,8 +31,15 @@ void DisplayController::printActiveMenuLine(char menuLine[21]) {
 	menuLine[20] = '<';
 	//_display->setTextColor(BLACK, WHITE); // crashes after a while
 	_display->println(menuLine);
-	//_display->setTextColor(WHITE, BLACK);
+	//_display->setTextColor(WHITE, BLACK); // crashes after a while
 }
+
+void DisplayController::printBPM(uint8_t bpm) {
+	_display->setCursor(0, 50);
+	_display->print("bpm "); // todo optimize
+	_display->print(bpm);
+}
+
 
 void DisplayController::printEncoderValues(int encoderIndex, long encoderValue) {
 	_display->clearDisplay();
