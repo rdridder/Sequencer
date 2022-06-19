@@ -16,9 +16,9 @@
 class SequencerEngine
 {
 public:
-    SequencerEngine(unsigned int bpm, volatile bool* updateUI);
+    SequencerEngine(uint8_t bpm, void (*uiCallbackMethodArg)(int noteIndex));
     void init();
-    void setTempo(unsigned int bpm);
+    void setTempo(uint8_t bpm);
     void setMode(uint8_t mode);
     bool setMidiNote(uint8_t note);
     uint8_t getTempo();
@@ -35,18 +35,17 @@ private:
     uint8_t bank1[16] = { 32,0,32,0,32,0,32,0,32,0,32,0,32,0,32,0 };
     volatile bool* _updateUI;
     volatile bool _checkMidi;
-
     uint8_t _midiData[3] = { 0, 0, 0 };
     uint8_t _previousMidiData[3] = { 0, 0, 0 };
-
     uint8_t _step = 0;
     uint8_t _mode = 0;
     unsigned int _ppqn = 16;
     unsigned int _notePulse = _ppqn / 4;
     uint8_t _tick = 0;
     unsigned int _frequency;
-    unsigned int _bpm;
+    uint8_t _bpm;
     unsigned long _prescalerCompare;
+    void (*uiCallbackMethod)(int noteIndex);
     void callBack();
     void calculateInterval();
 };

@@ -2,6 +2,7 @@
 
 ISR(TIMER3_COMPA_vect)          // timer compare interrupt service routine
 {
+    Serial.println("interrupt");
     SequencerEngine::isrCallback();
 }
 
@@ -11,12 +12,12 @@ ISR(TIMER3_COMPA_vect)          // timer compare interrupt service routine
 // Eighth note is half a quarter note.
 // Sixteenth note is half an eight note.
 
-SequencerEngine::SequencerEngine(unsigned int bpm, volatile bool* updateUI)
+SequencerEngine::SequencerEngine(uint8_t bpm, void (*uiCallbackMethodArg)(int noteIndex))
 {
     _bpm = bpm;
     _tick = 1;
-    _updateUI = updateUI;
     _checkMidi = false;
+    uiCallbackMethod = uiCallbackMethodArg;
 }
 
 SequencerEngine* SequencerEngine::instance;
@@ -132,7 +133,7 @@ void SequencerEngine::nextStep() {
     else {
         _step++;
     }
-    *_updateUI = true;
+    uiCallbackMethod(_step);
 }
 
 void SequencerEngine::setMode(uint8_t mode) {
@@ -173,7 +174,7 @@ void SequencerEngine::calculateInterval() {
     _prescalerCompare = 62500 / _frequency;
 }
 
-void SequencerEngine::setTempo(unsigned int bpm) {
+void SequencerEngine::setTempo(uint8_t bpm) {
     _bpm = bpm;
     calculateInterval();
     noInterrupts();

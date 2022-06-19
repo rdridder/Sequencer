@@ -19,8 +19,6 @@ MenuController *menuController;
 
 ezButton button(4);
 
-volatile bool updateUI = false;
-
 void setup() {
 	Serial.begin(115200);
 
@@ -32,7 +30,9 @@ void setup() {
 	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
 	displayController = new DisplayController();
 	ledController = new LedController();
-	sequencerEngine = new SequencerEngine(120, &updateUI);
+	sequencerEngine = new SequencerEngine(120, &uiCallback);
+	sequencerEngine->init();
+
 	menuController = new MenuController(displayController, sequencerEngine);
 
 	// Setup controllers
@@ -47,15 +47,15 @@ void setup() {
 unsigned long _previousMillis = 0;
 
 void loop() {
+	sequencerEngine->loop();
+
 	unsigned long currentMillis = millis();
 	rotaryEncoderController->tick(currentMillis);
 	shiftRegisterController->tick(currentMillis);
-	
 	button.loop();
 	if (button.isPressed()) {
 		rotaryMainButtonCallback();
 	}
-
 	//if (currentMillis - _previousMillis >= 2000) {
 	//	_previousMillis = currentMillis;
 	//	FREERAM_PRINT;
@@ -83,4 +83,19 @@ void rotaryMainButtonCallback() {
 void buttonCallback(unsigned long buttonValues) {
 	displayController->printButtonValues(buttonValues);
 	ledController->setLedState(buttonValues);
+}
+
+void uiCallback(uint8_t step) {
+	uint8_t led = 0;
+	led = step;
+	unsigned long state = 0;
+	if (step > 7) {
+		led -= 7;
+	}
+	state |= (1 << led);
+
+
+	Serial.print("step ");
+	Serial.println(step);
+	ledController->setLedState(state);
 }

@@ -18,7 +18,7 @@ class DisplayController
 		void stopDisplayOutput();
 		void printMenuLine(char menuLine[21]);
 		void printActiveMenuLine(char menuLine[21]);
-		void printBPM(uint8_t bpm);
+		void printSelectedMenuLine(char menuLine[21]);
 		void printEncoderValues(int encoderIndex, long encoderValue);
 		void printButtonValues(unsigned long buttonValues);
 		void setup();
