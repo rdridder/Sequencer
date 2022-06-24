@@ -27,6 +27,14 @@ void DisplayController::printMenuLine(char menuLine[21]) {
 	_display->println(menuLine);
 }
 
+void DisplayController::test(uint8_t step) {
+	_display->clearDisplay();
+	_display->setCursor(5, 60);
+	_display->write(step);
+	_display->display();
+
+}
+
 void DisplayController::printActiveMenuLine(char menuLine[21]) {
 	menuLine[20] = '<';
 	//_display->setTextColor(BLACK, WHITE); // crashes after a while

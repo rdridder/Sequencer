@@ -30,7 +30,8 @@ void setup() {
 	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
 	displayController = new DisplayController();
 	ledController = new LedController();
-	sequencerEngine = new SequencerEngine(120, &uiCallback);
+	uint8_t bpm = 120;
+	sequencerEngine = new SequencerEngine(bpm, &uiCallback);
 	sequencerEngine->init();
 
 	menuController = new MenuController(displayController, sequencerEngine);
@@ -93,9 +94,6 @@ void uiCallback(uint8_t step) {
 		led -= 7;
 	}
 	state |= (1 << led);
-
-
-	Serial.print("step ");
-	Serial.println(step);
 	ledController->setLedState(state);
+	//displayController->test(step);
 }

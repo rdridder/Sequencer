@@ -19,6 +19,7 @@ class MenuController
 		void cycleMenuMin();
 		void cycleActiveMenuMin();
 		void cycleActiveMenuPlus();
+		void handleStep();
 
 	protected:
 
@@ -27,8 +28,8 @@ class MenuController
 		SequencerEngine* _sequencerEngine;
 		char _started[8] = "started";
 		char _stopped[8] = "stopped";
-		char* _menuItems[21] = { "stopped              ", "bpm                  "};
-		uint8_t _numberOfMenuItems = 2;
+		char* _menuItems[21] = { "stopped              ", "bpm                  ", "step                 " };
+		uint8_t _numberOfMenuItems = 3;
 		int8_t _activeIndex = 0;
 		bool _isStarted = false;
 		bool _itemSelected = true;
@@ -36,6 +37,7 @@ class MenuController
 		void handleBPM(int direction);
 		void manipulateStartStopLine(char characters[8]);
 		void manipulateBPMLine(uint8_t bpm);
+		void manipulateStepLine(uint8_t step);
 };
 
 

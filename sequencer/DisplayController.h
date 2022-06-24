@@ -21,6 +21,7 @@ class DisplayController
 		void printSelectedMenuLine(char menuLine[21]);
 		void printEncoderValues(int encoderIndex, long encoderValue);
 		void printButtonValues(unsigned long buttonValues);
+		void test(uint8_t step);
 		void setup();
 
 	protected:

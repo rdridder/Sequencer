@@ -2,7 +2,6 @@
 
 ISR(TIMER3_COMPA_vect)          // timer compare interrupt service routine
 {
-    Serial.println("interrupt");
     SequencerEngine::isrCallback();
 }
 
@@ -73,6 +72,8 @@ void SequencerEngine::callBack() {
 
 void SequencerEngine::init() {
     instance = this;
+
+    Serial1.begin(31250);
 
     // Calculate the correct settings for the compare match register
     this->calculateInterval();
