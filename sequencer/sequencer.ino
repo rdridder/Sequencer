@@ -19,11 +19,14 @@ MenuController *menuController;
 
 ezButton button(4);
 
+volatile bool updateUi = false;
+volatile uint8_t currentStep = 0;
+
 void setup() {
 	Serial.begin(115200);
 
 	// Set I2C speed
-	Wire.setClock(I2C_SPEED);
+	//Wire.setClock(I2C_SPEED);
 	
 	// Initialize controllers
 	rotaryEncoderController = new RotaryEncoderController(&rotaryEncoderCallback);
@@ -57,6 +60,20 @@ void loop() {
 	if (button.isPressed()) {
 		rotaryMainButtonCallback();
 	}
+	if (updateUi) {
+		updateUi = false;
+		uint8_t led = 0;
+		led = currentStep;
+		unsigned long state = 0;
+		if (currentStep > 7) {
+			led -= 7;
+		}
+		state |= (1 << led);
+		ledController->setLedState(state);
+		menuController->handleStep();
+	}
+
+
 	//if (currentMillis - _previousMillis >= 2000) {
 	//	_previousMillis = currentMillis;
 	//	FREERAM_PRINT;
@@ -87,13 +104,6 @@ void buttonCallback(unsigned long buttonValues) {
 }
 
 void uiCallback(uint8_t step) {
-	uint8_t led = 0;
-	led = step;
-	unsigned long state = 0;
-	if (step > 7) {
-		led -= 7;
-	}
-	state |= (1 << led);
-	ledController->setLedState(state);
-	//displayController->test(step);
+	updateUi = true;
+	currentStep = step;
 }

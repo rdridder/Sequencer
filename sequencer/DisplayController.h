@@ -17,11 +17,12 @@ class DisplayController
 		void startDisplayOutput();
 		void stopDisplayOutput();
 		void printMenuLine(char menuLine[21]);
+		void print(char items[]);
 		void printActiveMenuLine(char menuLine[21]);
 		void printSelectedMenuLine(char menuLine[21]);
 		void printEncoderValues(int encoderIndex, long encoderValue);
 		void printButtonValues(unsigned long buttonValues);
-		void test(uint8_t step);
+		void setRowColumn(uint8_t row, uint8_t column);
 		void setup();
 
 	protected:

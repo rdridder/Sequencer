@@ -11,6 +11,7 @@ void DisplayController::setup() {
 	_display->setTextColor(SSD1306_WHITE);
 	_display->setCursor(0, 0);
 	_display->display();
+	_display->flush();
 }
 
 void DisplayController::startDisplayOutput() {
@@ -27,12 +28,8 @@ void DisplayController::printMenuLine(char menuLine[21]) {
 	_display->println(menuLine);
 }
 
-void DisplayController::test(uint8_t step) {
-	_display->clearDisplay();
-	_display->setCursor(5, 60);
-	_display->write(step);
-	_display->display();
-
+void DisplayController::print(char items[]) {
+	_display->print(items);
 }
 
 void DisplayController::printActiveMenuLine(char menuLine[21]) {
@@ -47,6 +44,10 @@ void DisplayController::printSelectedMenuLine(char menuLine[21]) {
 	//_display->setTextColor(BLACK, WHITE); // crashes after a while
 	_display->println(menuLine);
 	//_display->setTextColor(WHITE, BLACK); // crashes after a while
+}
+
+void DisplayController::setRowColumn(uint8_t row, uint8_t column) {
+	_display->setCursor(column * 6, row * 8);
 }
 
 void DisplayController::printEncoderValues(int encoderIndex, long encoderValue) {

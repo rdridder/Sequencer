@@ -16,7 +16,7 @@
 class SequencerEngine
 {
 public:
-    SequencerEngine(uint8_t bpm, void (*uiCallbackMethodArg)(int noteIndex));
+    SequencerEngine(uint8_t bpm, void (*uiCallbackMethodArg)(uint8_t step));
     void init();
     void setTempo(uint8_t bpm);
     void setMode(uint8_t mode);
@@ -45,7 +45,7 @@ private:
     unsigned int _frequency;
     uint8_t _bpm;
     unsigned long _prescalerCompare;
-    void (*uiCallbackMethod)(int noteIndex);
+    void (*uiCallbackMethod)(uint8_t step);
     void callBack();
     void calculateInterval();
 };

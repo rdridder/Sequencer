@@ -102,10 +102,16 @@ void MenuController::handleBPM(int direction ) {
 
 void MenuController::handleStep() {
 	uint8_t step = _sequencerEngine->getStep();
+	////manipulateStepLine(step);
+	////_displayController->startDisplayOutput();
+
+	//_displayController->setRowColumn(3,5);
+	//char s[4];
+	//sprintf(s, "%u", ++step);
+	//_displayController->print(s);
+	//_displayController->stopDisplayOutput();
 	manipulateStepLine(step);
-	_displayController->startDisplayOutput();
-	_displayController->printMenuLine(_menuItems[1]);
-	_displayController->stopDisplayOutput();
+	startMenu();
 }
 
 void MenuController::manipulateBPMLine(uint8_t bpm) {
@@ -121,7 +127,6 @@ void MenuController::manipulateStepLine(uint8_t step) {
 	sprintf(s, "%i", ++step);
 	_menuItems[2][5] = s[0];
 	_menuItems[2][6] = s[1];
-
 }
 
 void MenuController::manipulateStartStopLine(char characters[8]) {
