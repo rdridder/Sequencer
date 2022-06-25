@@ -45,7 +45,7 @@ void setup() {
 	ledController->setup();
 
 	// Start with the starting UI
-	menuController->startMenu();
+	menuController->startMenu(0);
 }
 
 unsigned long _previousMillis = 0;
@@ -82,6 +82,7 @@ void loop() {
 
 void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
 	if (NUM_ENCODERS - 1 == encoderIndex) {
+		menuController->setActiveMenuIndex(0);
 		if (direction < 0) {
 			menuController->cycleMenuMin();
 		}
@@ -90,12 +91,12 @@ void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
 		}
 	}
 	else {
-		menuController->noteMenu(encoderIndex+1);
-		//displayController->printEncoderValues(encoderIndex, encoderValue);
+		menuController->startMenu(1);
 	}
 }
 
 void rotaryMainButtonCallback() {
+	menuController->setActiveMenuIndex(0);
 	menuController->clickMenu();
 }
 

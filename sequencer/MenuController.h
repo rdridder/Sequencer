@@ -13,8 +13,8 @@ class MenuController
 {
 	public:
 		MenuController(DisplayController *displayController, SequencerEngine *sequencerEngine);
-		void startMenu();
-		void noteMenu(uint8_t step);
+		void startMenu(uint8_t menuIndex);
+		void setActiveMenuIndex(uint8_t menuIndex);
 		void clickMenu();
 		void cycleMenuPlus();
 		void cycleMenuMin();
@@ -29,11 +29,13 @@ class MenuController
 		SequencerEngine* _sequencerEngine;
 		char _started[8] = "started";
 		char _stopped[8] = "stopped";
-		uint8_t _numberOfActiveMenuItems = 5;		
-		char* _menuItems[2][21] = { { "stopped              ", "bpm                  ", "step                 " }, { "note                 ", "length               ", "velocity 100         " , "octave 0             ", "step                 " } };		
-		uint8_t const _numberOfMainMenuItems = 3;
-		uint8_t const _numberOfNoteMenuItems = 5;
-		int8_t _activeIndex = 0;
+		uint8_t _activeMenuIndex = 0;		
+		char *_menuItems[2][21] = { 
+			{ "stopped              ", "bpm                  ", "step                 " }, 
+			{ "note                 ", "length               ", "velocity 100         " , "octave 0             ", "step                 " } 
+		};
+		uint8_t const _numberOfMenuItems[2] = {3, 5};
+		int8_t _activeMenuItemIndex = 0;
 		bool _isStarted = false;
 		bool _itemSelected = true;
 		void handleStartStop();

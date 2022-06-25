@@ -3,47 +3,32 @@
 MenuController::MenuController(DisplayController* displayController, SequencerEngine* sequencerEngine) {
 	_displayController = displayController;
 	_sequencerEngine = sequencerEngine;
-	_numberOfActiveMenuItems = _numberOfMainMenuItems;
 	manipulateMenuLine(_sequencerEngine->getTempo(), 1, 4);
 	manipulateMenuLine(_sequencerEngine->getStep(), 2, 5);
 }
 
-void MenuController::startMenu() {
+void MenuController::startMenu(uint8_t menuIndex) {
+	_activeMenuIndex = menuIndex;
 	_displayController->startDisplayOutput();
-	for (uint8_t i = 0; i < _numberOfMainMenuItems; i++) {
-		if (i == _activeIndex) {
+	for (uint8_t i = 0; i < _numberOfMenuItems[_activeMenuIndex]; i++) {
+		if (i == _activeMenuItemIndex) {
 			if (_itemSelected) {
-				_displayController->printSelectedMenuLine(_menuItems[0][i]);
+				_displayController->printSelectedMenuLine(_menuItems[_activeMenuIndex][i]);
 			}
 			else {
-				_displayController->printActiveMenuLine(_menuItems[0][i]);
+				_displayController->printActiveMenuLine(_menuItems[_activeMenuIndex][i]);
 			}
 		}
 		else {
-			_displayController->printMenuLine(_menuItems[0][i]);
+			_displayController->printMenuLine(_menuItems[_activeMenuIndex][i]);
 		}
 	}
 	_displayController->stopDisplayOutput();
 }
 
-void MenuController::noteMenu(uint8_t step)
+void MenuController::setActiveMenuIndex(uint8_t menuIndex)
 {
-	_displayController->startDisplayOutput();
-	for (uint8_t i = 0; i < _numberOfNoteMenuItems; i++) {
-		if (i == _activeIndex) {
-			if (_itemSelected) {
-				_displayController->printSelectedMenuLine(_menuItems[1][i]);
-			}
-			else {
-				_displayController->printActiveMenuLine(_menuItems[1][i]);
-			}
-		}
-		else {
-			_displayController->printMenuLine(_menuItems[1][i]);
-		}
-	}
-	_displayController->stopDisplayOutput();
-
+	_activeMenuIndex = menuIndex;
 }
 
 void MenuController::cycleMenuPlus() {
@@ -51,11 +36,11 @@ void MenuController::cycleMenuPlus() {
 		cycleActiveMenuPlus();
 	}
 	else {
-		_activeIndex++;
-		if (_activeIndex >= _numberOfMainMenuItems) {
-			_activeIndex = 0;
+		_activeMenuItemIndex++;
+		if (_activeMenuItemIndex >= _numberOfMenuItems[_activeMenuIndex]) {
+			_activeMenuItemIndex = 0;
 		}
-		startMenu();
+		startMenu(_activeMenuIndex);
 	}
 }
 
@@ -64,35 +49,35 @@ void MenuController::cycleMenuMin() {
 		cycleActiveMenuMin();
 	}
 	else {
-		_activeIndex--;
-		if (_activeIndex < 0) {
-			_activeIndex = _numberOfMainMenuItems - 1;
+		_activeMenuItemIndex--;
+		if (_activeMenuItemIndex < 0) {
+			_activeMenuItemIndex = _numberOfMenuItems[_activeMenuIndex] - 1;
 		}
-		startMenu();
+		startMenu(_activeMenuIndex);
 	}
 }
 
 void MenuController::cycleActiveMenuMin() {
-	if (_activeIndex == 0) {
+	if (_activeMenuItemIndex == 0) {
 		handleStartStop();
 	}
-	else if (_activeIndex == 1) {
+	else if (_activeMenuItemIndex == 1) {
 		handleBPM(-1);
 	}
 }
 
 void MenuController::cycleActiveMenuPlus() {
-	if (_activeIndex == 0) {
+	if (_activeMenuItemIndex == 0) {
 		handleStartStop();
 	}
-	else if (_activeIndex == 1) {
+	else if (_activeMenuItemIndex == 1) {
 		handleBPM(1);
 	}
 }
 
 void MenuController::clickMenu() {
 	_itemSelected = !_itemSelected;
-	startMenu();
+	startMenu(_activeMenuIndex);
 }
 
 void MenuController::handleStartStop() {
@@ -105,7 +90,7 @@ void MenuController::handleStartStop() {
 		_sequencerEngine->setMode(1);
 	}
 	_isStarted = !_isStarted;
-	startMenu();
+	startMenu(_activeMenuIndex);
 }
 
 void MenuController::handleBPM(int direction ) {
@@ -118,13 +103,13 @@ void MenuController::handleBPM(int direction ) {
 	}
 	_sequencerEngine->setTempo(bpm);
 	manipulateMenuLine(bpm, 1, 4);
-	startMenu();
+	startMenu(_activeMenuIndex);
 }
 
 void MenuController::handleStep() {
 	uint8_t step = _sequencerEngine->getStep();
 	manipulateMenuLine(step, 2, 5);
-	startMenu();
+	startMenu(_activeMenuIndex);
 }
 
 void MenuController::manipulateMenuLine(uint8_t value, uint8_t menuIndex, uint8_t startIndex)
