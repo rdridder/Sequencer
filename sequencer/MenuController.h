@@ -28,16 +28,17 @@ class MenuController
 		SequencerEngine* _sequencerEngine;
 		char _started[8] = "started";
 		char _stopped[8] = "stopped";
-		char* _menuItems[21] = { "stopped              ", "bpm                  ", "step                 " };
-		uint8_t _numberOfMenuItems = 3;
+		char* _mainMenuItems[21] = { "stopped              ", "bpm                  ", "step                 " };
+		char* _noteMenuItems[21] = { "note                 ", "length               ", "velocity 100         " , "octave 0             ", "step                 " };
+		uint8_t const _numberOfMainMenuItems = 3;
+		uint8_t const _numberOfNoteMenuItems = 5;
 		int8_t _activeIndex = 0;
 		bool _isStarted = false;
 		bool _itemSelected = true;
 		void handleStartStop();
 		void handleBPM(int direction);
 		void manipulateStartStopLine(char characters[8]);
-		void manipulateBPMLine(uint8_t bpm);
-		void manipulateStepLine(uint8_t step);
+		void manipulateMenuLine(uint8_t value, uint8_t menuIndex, uint8_t startIndex);
 };
 
 

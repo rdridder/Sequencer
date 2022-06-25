@@ -3,23 +3,23 @@
 MenuController::MenuController(DisplayController* displayController, SequencerEngine* sequencerEngine) {
 	_displayController = displayController;
 	_sequencerEngine = sequencerEngine;
-	manipulateBPMLine(_sequencerEngine->getTempo());
-	manipulateStepLine(_sequencerEngine->getStep());
+	manipulateMenuLine(_sequencerEngine->getTempo(), 1, 4);
+	manipulateMenuLine(_sequencerEngine->getStep(), 2, 5);
 }
 
 void MenuController::startMenu() {
 	_displayController->startDisplayOutput();
-	for (uint8_t i = 0; i < _numberOfMenuItems; i++) {
+	for (uint8_t i = 0; i < _numberOfMainMenuItems; i++) {
 		if (i == _activeIndex) {
 			if (_itemSelected) {
-				_displayController->printSelectedMenuLine(_menuItems[i]);
+				_displayController->printSelectedMenuLine(_mainMenuItems[i]);
 			}
 			else {
-				_displayController->printActiveMenuLine(_menuItems[i]);
+				_displayController->printActiveMenuLine(_mainMenuItems[i]);
 			}
 		}
 		else {
-			_displayController->printMenuLine(_menuItems[i]);
+			_displayController->printMenuLine(_mainMenuItems[i]);
 		}
 	}
 	_displayController->stopDisplayOutput();
@@ -31,7 +31,7 @@ void MenuController::cycleMenuPlus() {
 	}
 	else {
 		_activeIndex++;
-		if (_activeIndex >= _numberOfMenuItems) {
+		if (_activeIndex >= _numberOfMainMenuItems) {
 			_activeIndex = 0;
 		}
 		startMenu();
@@ -45,7 +45,7 @@ void MenuController::cycleMenuMin() {
 	else {
 		_activeIndex--;
 		if (_activeIndex < 0) {
-			_activeIndex = _numberOfMenuItems - 1;
+			_activeIndex = _numberOfMainMenuItems - 1;
 		}
 		startMenu();
 	}
@@ -96,46 +96,32 @@ void MenuController::handleBPM(int direction ) {
 		bpm += 2;
 	}
 	_sequencerEngine->setTempo(bpm);
-	manipulateBPMLine(bpm);
+	manipulateMenuLine(bpm, 1, 4);
 	startMenu();
 }
 
 void MenuController::handleStep() {
 	uint8_t step = _sequencerEngine->getStep();
-	////manipulateStepLine(step);
-	////_displayController->startDisplayOutput();
-
-	//_displayController->setRowColumn(3,5);
-	//char s[4];
-	//sprintf(s, "%u", ++step);
-	//_displayController->print(s);
-	//_displayController->stopDisplayOutput();
-	manipulateStepLine(step);
+	manipulateMenuLine(step, 2, 5);
 	startMenu();
 }
 
-void MenuController::manipulateBPMLine(uint8_t bpm) {
+void MenuController::manipulateMenuLine(uint8_t value, uint8_t menuIndex, uint8_t startIndex)
+{
 	char s[4];
-	sprintf(s, "%i", bpm);
-	_menuItems[1][4] = s[0];
-	_menuItems[1][5] = s[1];
-	_menuItems[1][6] = s[2];
-}
-
-void MenuController::manipulateStepLine(uint8_t step) {
-	char s[4];
-	sprintf(s, "%i", ++step);
-	_menuItems[2][5] = s[0];
-	_menuItems[2][6] = s[1];
+	sprintf(s, "%i", value);
+	_mainMenuItems[menuIndex][startIndex] = s[0];
+	_mainMenuItems[menuIndex][startIndex+1] = s[1];
+	_mainMenuItems[menuIndex][startIndex+2] = s[2];
 }
 
 void MenuController::manipulateStartStopLine(char characters[8]) {
-	_menuItems[0][0] = characters[0];
-	_menuItems[0][1] = characters[1];
-	_menuItems[0][2] = characters[2];
-	_menuItems[0][3] = characters[3];
-	_menuItems[0][4] = characters[4];
-	_menuItems[0][5] = characters[5];
-	_menuItems[0][6] = characters[6];
+	_mainMenuItems[0][0] = characters[0];
+	_mainMenuItems[0][1] = characters[1];
+	_mainMenuItems[0][2] = characters[2];
+	_mainMenuItems[0][3] = characters[3];
+	_mainMenuItems[0][4] = characters[4];
+	_mainMenuItems[0][5] = characters[5];
+	_mainMenuItems[0][6] = characters[6];
 }
 
