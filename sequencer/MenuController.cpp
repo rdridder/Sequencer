@@ -3,6 +3,7 @@
 MenuController::MenuController(DisplayController* displayController, SequencerEngine* sequencerEngine) {
 	_displayController = displayController;
 	_sequencerEngine = sequencerEngine;
+	_numberOfActiveMenuItems = _numberOfMainMenuItems;
 	manipulateMenuLine(_sequencerEngine->getTempo(), 1, 4);
 	manipulateMenuLine(_sequencerEngine->getStep(), 2, 5);
 }
@@ -12,17 +13,37 @@ void MenuController::startMenu() {
 	for (uint8_t i = 0; i < _numberOfMainMenuItems; i++) {
 		if (i == _activeIndex) {
 			if (_itemSelected) {
-				_displayController->printSelectedMenuLine(_mainMenuItems[i]);
+				_displayController->printSelectedMenuLine(_menuItems[0][i]);
 			}
 			else {
-				_displayController->printActiveMenuLine(_mainMenuItems[i]);
+				_displayController->printActiveMenuLine(_menuItems[0][i]);
 			}
 		}
 		else {
-			_displayController->printMenuLine(_mainMenuItems[i]);
+			_displayController->printMenuLine(_menuItems[0][i]);
 		}
 	}
 	_displayController->stopDisplayOutput();
+}
+
+void MenuController::noteMenu(uint8_t step)
+{
+	_displayController->startDisplayOutput();
+	for (uint8_t i = 0; i < _numberOfNoteMenuItems; i++) {
+		if (i == _activeIndex) {
+			if (_itemSelected) {
+				_displayController->printSelectedMenuLine(_menuItems[1][i]);
+			}
+			else {
+				_displayController->printActiveMenuLine(_menuItems[1][i]);
+			}
+		}
+		else {
+			_displayController->printMenuLine(_menuItems[1][i]);
+		}
+	}
+	_displayController->stopDisplayOutput();
+
 }
 
 void MenuController::cycleMenuPlus() {
@@ -110,18 +131,18 @@ void MenuController::manipulateMenuLine(uint8_t value, uint8_t menuIndex, uint8_
 {
 	char s[4];
 	sprintf(s, "%i", value);
-	_mainMenuItems[menuIndex][startIndex] = s[0];
-	_mainMenuItems[menuIndex][startIndex+1] = s[1];
-	_mainMenuItems[menuIndex][startIndex+2] = s[2];
+	_menuItems[0][menuIndex][startIndex] = s[0];
+	_menuItems[0][menuIndex][startIndex+1] = s[1];
+	_menuItems[0][menuIndex][startIndex+2] = s[2];
 }
 
 void MenuController::manipulateStartStopLine(char characters[8]) {
-	_mainMenuItems[0][0] = characters[0];
-	_mainMenuItems[0][1] = characters[1];
-	_mainMenuItems[0][2] = characters[2];
-	_mainMenuItems[0][3] = characters[3];
-	_mainMenuItems[0][4] = characters[4];
-	_mainMenuItems[0][5] = characters[5];
-	_mainMenuItems[0][6] = characters[6];
+	_menuItems[0][0][0] = characters[0];
+	_menuItems[0][0][1] = characters[1];
+	_menuItems[0][0][2] = characters[2];
+	_menuItems[0][0][3] = characters[3];
+	_menuItems[0][0][4] = characters[4];
+	_menuItems[0][0][5] = characters[5];
+	_menuItems[0][0][6] = characters[6];
 }
 

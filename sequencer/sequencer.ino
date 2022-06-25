@@ -90,7 +90,8 @@ void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
 		}
 	}
 	else {
-		displayController->printEncoderValues(encoderIndex, encoderValue);
+		menuController->noteMenu(encoderIndex+1);
+		//displayController->printEncoderValues(encoderIndex, encoderValue);
 	}
 }
 
