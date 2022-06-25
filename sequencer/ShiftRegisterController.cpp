@@ -14,7 +14,7 @@ void ShiftRegisterController::setup() {
 	digitalWrite(BUTT_SHIFT_LOAD_PIN, HIGH);
 }
 
-void ShiftRegisterController::tick(unsigned long currentMillis) {
+void ShiftRegisterController::loop(unsigned long currentMillis) {
 	if (currentMillis - _previousMillis < BUTT_SHIFT_POLL_INTERVAL_MS) {
 		return;
 	}

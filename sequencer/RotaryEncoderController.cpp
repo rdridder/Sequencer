@@ -14,7 +14,7 @@ RotaryEncoderController::RotaryEncoderController(void (*callbackMethodArg)(int e
 	callbackMethod = callbackMethodArg;
 }
 
-void RotaryEncoderController::tick(unsigned long currentMillis) {
+void RotaryEncoderController::loop(unsigned long currentMillis) {
 	if (currentMillis - _previousMillis < ENCODER_POLL_INTERVAL_MS) {
 		return;
 	}

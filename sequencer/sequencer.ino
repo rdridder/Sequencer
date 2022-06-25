@@ -54,8 +54,8 @@ void loop() {
 	sequencerEngine->loop();
 
 	unsigned long currentMillis = millis();
-	rotaryEncoderController->tick(currentMillis);
-	shiftRegisterController->tick(currentMillis);
+	rotaryEncoderController->loop(currentMillis);
+	shiftRegisterController->loop(currentMillis);
 	button.loop();
 	if (button.isPressed()) {
 		rotaryMainButtonCallback();

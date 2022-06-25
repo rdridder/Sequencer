@@ -13,7 +13,7 @@ class RotaryEncoderController
 {
 	public:
 		RotaryEncoderController(void (*callbackMethodArg)(int encoderIndex, long encoderValue, int direction));
-		void tick(unsigned long currentMillis);
+		void loop(unsigned long currentMillis);
 
 	protected:
 
