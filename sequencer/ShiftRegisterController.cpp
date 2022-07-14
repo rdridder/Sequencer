@@ -10,8 +10,6 @@ void ShiftRegisterController::setup() {
 	pinMode(BUTT_SHIFT_CLK_ENABLE_PIN, OUTPUT);
 	pinMode(BUTT_SHIFT_CLK_PIN, OUTPUT);
 	pinMode(BUTT_SHIFT_DATA_PIN, INPUT);
-	digitalWrite(BUTT_SHIFT_CLK_PIN, LOW);
-	digitalWrite(BUTT_SHIFT_LOAD_PIN, HIGH);
 }
 
 void ShiftRegisterController::loop(unsigned long currentMillis) {
@@ -22,6 +20,11 @@ void ShiftRegisterController::loop(unsigned long currentMillis) {
 	long bitVal;
 	unsigned long bytesVal = 0;
 
+	// 6 clk/inh BUTT_SHIFT_CLK_ENABLE_PIN	enablePin
+	// 7 clk BUTT_SHIFT_CLK_PIN				clockPin
+	// 5 ser_in BUTT_SHIFT_DATA_PIN			dataPin
+	// 8 sh/ld BUTT_SHIFT_LOAD_PIN			LoadPin
+
 	/* Trigger a parallel Load to latch the state of the data lines,
 	*/
 	digitalWrite(BUTT_SHIFT_CLK_ENABLE_PIN, HIGH);
@@ -29,19 +32,11 @@ void ShiftRegisterController::loop(unsigned long currentMillis) {
 	digitalWrite(BUTT_SHIFT_LOAD_PIN, HIGH);
 	digitalWrite(BUTT_SHIFT_CLK_ENABLE_PIN, LOW);
 
-	/* Loop to read each bit value from the serial out line
-		* of the SN74HC165N.
-	*/
-	for (int i = 0; i < BUTT_SHIFT_NUMBER_OF_BUTTONS; i++)
+	for (int i = 0; i < SHIFT_NUMBER_OF_BUTTONS; i++)
 	{
 		bitVal = digitalRead(BUTT_SHIFT_DATA_PIN);
+		bytesVal |= (bitVal << ((SHIFT_NUMBER_OF_BUTTONS - 1) - i));
 
-		/* Set the corresponding bit in bytesVal.
-		*/
-		bytesVal |= (bitVal << ((BUTT_SHIFT_NUMBER_OF_BUTTONS - 1) - i));
-
-		/* Pulse the Clock (rising edge shifts the next bit).
-		*/
 		digitalWrite(BUTT_SHIFT_CLK_PIN, HIGH);
 		digitalWrite(BUTT_SHIFT_CLK_PIN, LOW);
 	}
