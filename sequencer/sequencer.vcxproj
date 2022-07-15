@@ -119,6 +119,7 @@
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="RotaryEncoderController.h" />
     <ClInclude Include="SequencerEngine.h" />
+    <ClInclude Include="SequencerStep.h" />
     <ClInclude Include="ShiftRegisterController.h" />
     <ClInclude Include="__vm\.sequencer.vsarduino.h" />
   </ItemGroup>

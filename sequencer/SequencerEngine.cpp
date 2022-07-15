@@ -19,6 +19,21 @@ SequencerEngine::SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCa
     _numberOfSteps = numberOfSteps;
     _stepCompareValue = numberOfSteps - 1;
     uiCallbackMethod = uiCallbackMethodArg;
+    
+    // Dump in some notes
+    // Will be replaced by load mechanism
+    for (uint8_t i = 0; i < _numberOfSteps; i++) {
+        uint8_t note = 0;
+        if (i % 1 == 0) {
+            note = 32;
+        }
+        sequencerStep step;
+        step.length = 1;
+        step.note = note;
+        step.transpose = 0;
+        step.velocity = 100;
+        bank1[i] = &step;
+    }
 }
 
 SequencerEngine* SequencerEngine::instance;
@@ -34,7 +49,7 @@ void SequencerEngine::loop() {
         _previousMidiData[0] = _midiData[0];
         _previousMidiData[1] = _midiData[1];
         _previousMidiData[2] = _midiData[2];
-        _midiData[0] = bank1[_step];
+        _midiData[0] = bank1[_step]->note;
 
         uint8_t midiNote = _midiData[0];
         uint8_t previousMidiNote = _previousMidiData[0];
@@ -117,12 +132,12 @@ bool SequencerEngine::setMidiNote(uint8_t note) {
     if (_mode != 0) {
         return false;
     }
-    bank1[_step] = note;
+    bank1[_step]->note = note;
     return true;
 }
 
 uint8_t SequencerEngine::getNote() {
-    return bank1[_step];
+    return bank1[_step]->note;
 }
 
 uint8_t SequencerEngine::getTempo() {

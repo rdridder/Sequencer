@@ -97,8 +97,8 @@ void rotaryMainButtonCallback() {
 }
 
 void buttonCallback(unsigned long buttonValues) {
-	displayController->printButtonValues(buttonValues);
-	ledController->setLedState(buttonValues);
+	//displayController->printButtonValues(buttonValues);
+	//ledController->setLedState(buttonValues);
 }
 
 void uiCallback(uint8_t step) {
