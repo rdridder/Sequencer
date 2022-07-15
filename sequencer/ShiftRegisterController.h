@@ -11,7 +11,7 @@
 class ShiftRegisterController
 {
 	public:
-		ShiftRegisterController(void (*callbackMethodArg)(unsigned long buttonValues));
+		ShiftRegisterController(void (*callbackMethodArg)(unsigned long buttonValues), int numberOfButtons);
 		void loop(unsigned long currentMillis);
 		void setup();
 
@@ -20,7 +20,9 @@ class ShiftRegisterController
 	private:
 		long _previousMillis = 0;
 		unsigned long _oldPinValues = 0;
-    unsigned long _pinValues = 0;
+		unsigned long _pinValues = 0;
+		int _numberOfButtons;
+		byte* _readValues = { 0 };
 		void (*callbackMethod)(unsigned long buttonValues);
 };
 

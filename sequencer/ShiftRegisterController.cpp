@@ -1,8 +1,9 @@
 #include "ShiftRegisterController.h"
 
-ShiftRegisterController::ShiftRegisterController(void (*callbackMethodArg)(unsigned long buttonValues))
+ShiftRegisterController::ShiftRegisterController(void (*callbackMethodArg)(unsigned long buttonValues), int numberOfButtons)
 {
 	callbackMethod = callbackMethodArg;
+	_numberOfButtons = numberOfButtons;
 }
 
 void ShiftRegisterController::setup() {
@@ -32,15 +33,16 @@ void ShiftRegisterController::loop(unsigned long currentMillis) {
 	digitalWrite(BUTT_SHIFT_LOAD_PIN, HIGH);
 	digitalWrite(BUTT_SHIFT_CLK_ENABLE_PIN, LOW);
 
-	for (int i = 0; i < SHIFT_NUMBER_OF_BUTTONS; i++)
+	for (int i = 0; i < _numberOfButtons; i++)
 	{
 		bitVal = digitalRead(BUTT_SHIFT_DATA_PIN);
-		bytesVal |= (bitVal << ((SHIFT_NUMBER_OF_BUTTONS - 1) - i));
+		bytesVal |= (bitVal << ((_numberOfButtons - 1) - i));
 
 		digitalWrite(BUTT_SHIFT_CLK_PIN, HIGH);
 		digitalWrite(BUTT_SHIFT_CLK_PIN, LOW);
 	}
 	_pinValues = bytesVal;
+
 	if (_pinValues != _oldPinValues)
 	{
 		_oldPinValues = _pinValues;

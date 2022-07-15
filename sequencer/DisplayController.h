@@ -13,7 +13,7 @@
 class DisplayController
 {
 	public:
-		DisplayController();
+		DisplayController(int numberOfButtons);
 		void startDisplayOutput();
 		void stopDisplayOutput();
 		void printMenuLine(char menuLine[21]);
@@ -29,6 +29,7 @@ class DisplayController
 
 	private:
 		Adafruit_SSD1306 *_display;
+		int _numberOfButtons;
 };
 
 #endif

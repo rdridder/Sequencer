@@ -1,7 +1,7 @@
 #pragma once
 
 #define NUMBOARDS 1
-#define NUM_ENCODERS NUMBOARDS * 8 + 1
+#define ENCODER_NUM_ENCODERS NUMBOARDS * 8 + 1
 #define ENCODER_POLL_INTERVAL_MS 2
 
 #define BUTT_SHIFT_NUMBER_OF_SHIFT_REGISTER NUMBOARDS * 2
@@ -22,3 +22,6 @@
 #define LED_SHIFT_DATA_PIN 12
 
 #define I2C_SPEED 400000
+
+// Need to clean up encoder section
+const int NUM_ENCODERS = ENCODER_NUM_ENCODERS;

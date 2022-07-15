@@ -1,7 +1,8 @@
 #include "DisplayController.h"
 
-DisplayController::DisplayController() {
+DisplayController::DisplayController(int numberOfButtons) {
 	_display = new Adafruit_SSD1306(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET);
+	_numberOfButtons = numberOfButtons;
 }
 
 void DisplayController::setup() {
@@ -67,7 +68,7 @@ void DisplayController::printButtonValues(unsigned long buttonValues) {
 	_display->clearDisplay();
 	_display->setCursor(0, 0);
 	_display->println("buttons");
-	for (int i = 0; i < BUTT_SHIFT_NUMBER_OF_BUTTONS; i++)
+	for (int i = 0; i < _numberOfButtons; i++)
 	{
 		if (i % 8 == 0) {
 			_display->println();

@@ -30,8 +30,8 @@ void setup() {
 	
 	// Initialize controllers
 	rotaryEncoderController = new RotaryEncoderController(&rotaryEncoderCallback);
-	shiftRegisterController = new ShiftRegisterController(&buttonCallback);
-	displayController = new DisplayController();
+	shiftRegisterController = new ShiftRegisterController(&buttonCallback, BUTT_SHIFT_NUMBER_OF_BUTTONS);
+	displayController = new DisplayController(BUTT_SHIFT_NUMBER_OF_BUTTONS);
 	ledController = new LedController();
 	uint8_t bpm = 120;
 	sequencerEngine = new SequencerEngine(bpm, &uiCallback);
@@ -65,9 +65,6 @@ void loop() {
 		uint8_t led = 0;
 		led = currentStep;
 		unsigned long state = 0;
-		if (currentStep > 7) {
-			led -= 7;
-		}
 		state |= (1 << led);
 		ledController->setLedState(state);
 		menuController->handleStep();
