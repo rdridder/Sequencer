@@ -6,7 +6,7 @@
 #else
 	#include "WProgram.h"
 #endif
-#include "SequencerEngine.h"
+#include "Config.h"
 
 #define NOTE_ON 144
 #define NOTE_OFF 128
@@ -16,7 +16,7 @@
 class SequencerEngine
 {
 public:
-    SequencerEngine(uint8_t bpm, void (*uiCallbackMethodArg)(uint8_t step));
+    SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCallbackMethodArg)(uint8_t step));
     void init();
     void setTempo(uint8_t bpm);
     void setMode(uint8_t mode);
@@ -32,13 +32,19 @@ public:
     static SequencerEngine* instance;
 
 private:
+    #if SEQ_NUMBER_OF_STEPS == 8
+    uint8_t bank1[SEQ_NUMBER_OF_STEPS] = { 32,0,32,0,32,0,32,0 };
+    #else
     uint8_t bank1[16] = { 32,0,32,0,32,0,32,0,32,0,32,0,32,0,32,0 };
+    #endif
     volatile bool* _updateUI;
     volatile bool _checkMidi;
     uint8_t _midiData[3] = { 0, 0, 0 };
     uint8_t _previousMidiData[3] = { 0, 0, 0 };
     uint8_t _step = 0;
     uint8_t _mode = 0;
+    uint8_t _numberOfSteps;
+    uint8_t _stepCompareValue;
     unsigned int _ppqn = 16;
     unsigned int _notePulse = _ppqn / 4;
     uint8_t _tick = 0;

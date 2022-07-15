@@ -33,8 +33,7 @@ void setup() {
 	shiftRegisterController = new ShiftRegisterController(&buttonCallback, BUTT_SHIFT_NUMBER_OF_BUTTONS);
 	displayController = new DisplayController(BUTT_SHIFT_NUMBER_OF_BUTTONS);
 	ledController = new LedController();
-	uint8_t bpm = 120;
-	sequencerEngine = new SequencerEngine(bpm, &uiCallback);
+	sequencerEngine = new SequencerEngine(SEQ_START_BPM, SEQ_NUMBER_OF_STEPS, &uiCallback);
 	sequencerEngine->init();
 
 	menuController = new MenuController(displayController, sequencerEngine);

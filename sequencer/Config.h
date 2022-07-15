@@ -21,6 +21,9 @@
 #define LED_SHIFT_LATCH_PIN 11
 #define LED_SHIFT_DATA_PIN 12
 
+#define SEQ_NUMBER_OF_STEPS 8
+#define SEQ_START_BPM 120
+
 #define I2C_SPEED 400000
 
 // Need to clean up encoder section
