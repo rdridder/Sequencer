@@ -11,32 +11,48 @@ ISR(TIMER3_COMPA_vect)          // timer compare interrupt service routine
 // Eighth note is half a quarter note.
 // Sixteenth note is half an eight note.
 
-SequencerEngine::SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCallbackMethodArg)(uint8_t step))
+SequencerEngine::SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCallbackMethod)(uint8_t step))
 {
     _bpm = bpm;
     _tick = 1;
     _checkMidi = false;
     _numberOfSteps = numberOfSteps;
     _stepCompareValue = numberOfSteps - 1;
-    uiCallbackMethod = uiCallbackMethodArg;
+    _uiCallbackMethod = uiCallbackMethod;
     
-    // Dump in some notes
-    // Will be replaced by load mechanism
-    for (uint8_t i = 0; i < _numberOfSteps; i++) {
-        uint8_t note = 0;
-        if (i % 1 == 0) {
-            note = 32;
-        }
-        sequencerStep step;
-        step.length = 1;
-        step.note = note;
-        step.transpose = 0;
-        step.velocity = 100;
-        bank1[i] = &step;
-    }
+    // Remove this method after proper loading of data is done
+    setupTestData();
 }
 
 SequencerEngine* SequencerEngine::instance;
+
+void SequencerEngine::setupTestData() {
+    // Dump in some notes
+    // Will be replaced by load mechanism
+    uint8_t note = 0;
+    uint8_t length = 1;
+    for (uint8_t i = 0; i < _numberOfSteps; i++) {
+        if (i == 0) {
+            note = 32;
+            length = 2;
+        }
+        else if (i == 1) {
+            note = 33;
+            length = 1;
+        }
+        else if (i == 4) {
+            note = 34;
+            length = 2;
+        }
+        else {
+            note = 0;
+        }
+        _bank1[i].length = length;
+        _bank1[i].note = note;
+        _bank1[i].transpose = 1;
+        _bank1[i].velocity = 1;
+    }
+}
 
 void SequencerEngine::isrCallback()
 {
@@ -44,35 +60,72 @@ void SequencerEngine::isrCallback()
 }
 
 void SequencerEngine::loop() {
+    static int cycle = 0;
+
+
     if (_checkMidi) {
-
-        _previousMidiData[0] = _midiData[0];
-        _previousMidiData[1] = _midiData[1];
-        _previousMidiData[2] = _midiData[2];
-        _midiData[0] = bank1[_step]->note;
-
-        uint8_t midiNote = _midiData[0];
-        uint8_t previousMidiNote = _previousMidiData[0];
-
-        if (midiNote == previousMidiNote) {
-            // If the data is the same, don't send anything
+        if (cycle >= 8) {
+            _checkMidi = false;
+            return;
         }
-        else if (midiNote == 0 && previousMidiNote > 0) {
-            // Send a note off for the previous note
-            writeSerialMidi(NOTE_OFF, previousMidiNote, VELOCITY_OFF);
-        }
-        else if (midiNote > 0 && previousMidiNote > 0) {
-            // Send a note off for the previous note
-            writeSerialMidi(NOTE_OFF, previousMidiNote, VELOCITY_OFF);
-            // Send a note on for the current note
+
+        uint8_t midiNote = _bank1[_step].note;
+        if (midiNote != 0) {
+            // Turn note on
             writeSerialMidi(NOTE_ON, midiNote, VELOCITY_ON);
+            
+            // Schedule the note off
+            // Work out the index for the note off event
+            uint8_t index = _step + _bank1[_step].length;
+            if (index > _numberOfSteps) {
+                index = index - _numberOfSteps;
+            }
+            for (uint8_t i = 0; i < _numberOfSteps; i++) {
+                uint8_t activeNoteOff = _noteOffs[index][i];
+                if (activeNoteOff == 0) {
+                    _noteOffs[index][i] = midiNote;
+                    break;
+                }
+            }
         }
-        else if (midiNote > 0 && previousMidiNote == 0) {
-            // Send a note on for the current note
-            writeSerialMidi(NOTE_ON, midiNote, VELOCITY_ON);
+
+        // Process the note off events
+        for (uint8_t i = 0; i < _numberOfSteps; i++) {
+            uint8_t midinoteoff = _noteOffs[_step][i];
+            if (midinoteoff != 0) {
+                // send the note off and clear the scheduled note off
+                writeSerialMidi(NOTE_OFF, midinoteoff, VELOCITY_OFF);
+                _noteOffs[_step][i] = 0;
+            }
+            else {
+                // all notes off send and cleared
+                break;
+            }
         }
+
+
+
+
+        //if (midiNote == previousMidiNote) {
+        //    // If the data is the same, don't send anything
+        //}
+        //else if (midiNote == 0 && previousMidiNote > 0) {
+        //    // Send a note off for the previous note
+        //    writeSerialMidi(NOTE_OFF, previousMidiNote, VELOCITY_OFF);
+        //}
+        //else if (midiNote > 0 && previousMidiNote > 0) {
+        //    // Send a note off for the previous note
+        //    writeSerialMidi(NOTE_OFF, previousMidiNote, VELOCITY_OFF);
+        //    // Send a note on for the current note
+        //    writeSerialMidi(NOTE_ON, midiNote, VELOCITY_ON);
+        //}
+        //else if (midiNote > 0 && previousMidiNote == 0) {
+        //    // Send a note on for the current note
+        //    writeSerialMidi(NOTE_ON, midiNote, VELOCITY_ON);
+        //}
         // Do serial midi
         _checkMidi = false;
+        //cycle++;
     }
 }
 
@@ -132,12 +185,12 @@ bool SequencerEngine::setMidiNote(uint8_t note) {
     if (_mode != 0) {
         return false;
     }
-    bank1[_step]->note = note;
+    _bank1[_step].note = note;
     return true;
 }
 
 uint8_t SequencerEngine::getNote() {
-    return bank1[_step]->note;
+    return _bank1[_step].note;
 }
 
 uint8_t SequencerEngine::getTempo() {
@@ -151,13 +204,15 @@ void SequencerEngine::nextStep() {
     else {
         _step++;
     }
-    uiCallbackMethod(_step);
+    _uiCallbackMethod(_step);
 }
 
 void SequencerEngine::setMode(uint8_t mode) {
     _mode = mode;
     if (mode == 1) {
         noInterrupts();
+        // Set the sequencer one step back to make sure the first notes are played
+        _step--;
         TIMSK3 |= (1 << OCIE3A);
         interrupts();
     }

@@ -9,12 +9,12 @@
 #include "WProgram.h"
 #endif
 
-typedef struct SequencerStep {
+struct SequencerStep {
 	uint8_t note;
 	uint8_t length;
 	uint8_t velocity;
 	uint8_t transpose;
-} sequencerStep;
+};
 
 #endif
 

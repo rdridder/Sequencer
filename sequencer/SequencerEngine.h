@@ -17,7 +17,7 @@
 class SequencerEngine
 {
 public:
-    SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCallbackMethodArg)(uint8_t step));
+    SequencerEngine(uint8_t bpm, uint8_t numberOfSteps, void (*uiCallbackMethod)(uint8_t step));
     void init();
     void setTempo(uint8_t bpm);
     void setMode(uint8_t mode);
@@ -33,7 +33,11 @@ public:
     static SequencerEngine* instance;
 
 private:
-    sequencerStep* bank1[SEQ_NUMBER_OF_STEPS];
+    struct SequencerStep _bank1[SEQ_NUMBER_OF_STEPS];
+    byte _noteOffs[SEQ_NUMBER_OF_STEPS][SEQ_NUMBER_OF_STEPS] = { {0}, {0} };
+    void setupTestData();
+
+
     volatile bool* _updateUI;
     volatile bool _checkMidi;
     uint8_t _midiData[3] = { 0, 0, 0 };
@@ -48,7 +52,7 @@ private:
     unsigned int _frequency;
     uint8_t _bpm;
     unsigned long _prescalerCompare;
-    void (*uiCallbackMethod)(uint8_t step);
+    void (*_uiCallbackMethod)(uint8_t step);
     void callBack();
     void calculateInterval();
 };
