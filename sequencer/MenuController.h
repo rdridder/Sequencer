@@ -13,7 +13,7 @@ class MenuController
 {
 	public:
 		MenuController(DisplayController *displayController, SequencerEngine *sequencerEngine);
-		void startMenu(uint8_t menuIndex);
+		bool startMenu(uint8_t menuIndex);
 		void setActiveMenuIndex(uint8_t menuIndex);
 		void clickMenu();
 		void cycleMenuPlus();
@@ -35,7 +35,7 @@ class MenuController
 			{ "note                 ", "length               ", "velocity 100         " , "octave 0             ", "step                 " } 
 		};
 		uint8_t const _numberOfMenuItems[2] = {3, 5};
-		int8_t _activeMenuItemIndex = 0;
+		int8_t _activeMenuItemIndex[2] = { 0, 0 };
 		bool _isStarted = false;
 		bool _itemSelected = true;
 		void handleStartStop();

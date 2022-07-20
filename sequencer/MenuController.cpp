@@ -7,11 +7,12 @@ MenuController::MenuController(DisplayController* displayController, SequencerEn
 	manipulateMenuLine(_sequencerEngine->getStep(), 2, 5);
 }
 
-void MenuController::startMenu(uint8_t menuIndex) {
+bool MenuController::startMenu(uint8_t menuIndex) {
+	bool didSwitch = _activeMenuIndex != menuIndex;
 	_activeMenuIndex = menuIndex;
 	_displayController->startDisplayOutput();
 	for (uint8_t i = 0; i < _numberOfMenuItems[_activeMenuIndex]; i++) {
-		if (i == _activeMenuItemIndex) {
+		if (i == _activeMenuItemIndex[menuIndex]) {
 			if (_itemSelected) {
 				_displayController->printSelectedMenuLine(_menuItems[_activeMenuIndex][i]);
 			}
@@ -24,6 +25,7 @@ void MenuController::startMenu(uint8_t menuIndex) {
 		}
 	}
 	_displayController->stopDisplayOutput();
+	return didSwitch;
 }
 
 void MenuController::setActiveMenuIndex(uint8_t menuIndex)
@@ -32,45 +34,45 @@ void MenuController::setActiveMenuIndex(uint8_t menuIndex)
 }
 
 void MenuController::cycleMenuPlus() {
-	if (_itemSelected) {
-		cycleActiveMenuPlus();
-	}
-	else {
-		_activeMenuItemIndex++;
-		if (_activeMenuItemIndex >= _numberOfMenuItems[_activeMenuIndex]) {
-			_activeMenuItemIndex = 0;
+	//if (_itemSelected) {
+	//	cycleActiveMenuPlus();
+	//}
+	//else {
+		_activeMenuItemIndex[_activeMenuIndex]++;
+		if (_activeMenuItemIndex[_activeMenuIndex] >= _numberOfMenuItems[_activeMenuIndex]) {
+			_activeMenuItemIndex[_activeMenuIndex] = 0;
 		}
 		startMenu(_activeMenuIndex);
-	}
+	//}
 }
 
 void MenuController::cycleMenuMin() {
-	if (_itemSelected) {
-		cycleActiveMenuMin();
-	}
-	else {
-		_activeMenuItemIndex--;
-		if (_activeMenuItemIndex < 0) {
-			_activeMenuItemIndex = _numberOfMenuItems[_activeMenuIndex] - 1;
+	//if (_itemSelected) {
+	//	cycleActiveMenuMin();
+	//}
+	//else {
+		_activeMenuItemIndex[_activeMenuIndex]--;
+		if (_activeMenuItemIndex[_activeMenuIndex] < 0) {
+			_activeMenuItemIndex[_activeMenuIndex] = _numberOfMenuItems[_activeMenuIndex] - 1;
 		}
 		startMenu(_activeMenuIndex);
-	}
+	//}
 }
 
 void MenuController::cycleActiveMenuMin() {
-	if (_activeMenuItemIndex == 0) {
+	if (_activeMenuItemIndex[_activeMenuIndex] == 0) {
 		handleStartStop();
 	}
-	else if (_activeMenuItemIndex == 1) {
+	else if (_activeMenuItemIndex[_activeMenuIndex] == 1) {
 		handleBPM(-1);
 	}
 }
 
 void MenuController::cycleActiveMenuPlus() {
-	if (_activeMenuItemIndex == 0) {
+	if (_activeMenuItemIndex[_activeMenuIndex] == 0) {
 		handleStartStop();
 	}
-	else if (_activeMenuItemIndex == 1) {
+	else if (_activeMenuItemIndex[_activeMenuIndex] == 1) {
 		handleBPM(1);
 	}
 }

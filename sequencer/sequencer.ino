@@ -20,6 +20,7 @@ MenuController *menuController;
 ezButton button(4);
 
 volatile bool updateUi = false;
+volatile bool updateMenu = false;
 volatile uint8_t currentStep = 0;
 
 void setup() {
@@ -80,10 +81,10 @@ void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
 	if (NUM_ENCODERS - 1 == encoderIndex) {
 		menuController->setActiveMenuIndex(0);
 		if (direction < 0) {
-			menuController->cycleMenuMin();
+			menuController->cycleActiveMenuMin();
 		}
 		else {
-			menuController->cycleMenuPlus();
+			menuController->cycleActiveMenuPlus();
 		}
 	}
 	else {
@@ -92,13 +93,21 @@ void rotaryEncoderCallback(int encoderIndex, long encoderValue, int direction) {
 }
 
 void rotaryMainButtonCallback() {
-	menuController->setActiveMenuIndex(0);
-	menuController->clickMenu();
+	if (!menuController->startMenu(0)) {
+		menuController->cycleMenuPlus();
+	}
 }
 
 void buttonCallback(unsigned long buttonValues) {
-	//displayController->printButtonValues(buttonValues);
-	//ledController->setLedState(buttonValues);
+	if (buttonValues > 128) {
+		if (!menuController->startMenu(1)) {
+			menuController->cycleMenuPlus();
+		}
+	}
+	else if (buttonValues <= 128 && buttonValues > 0) {
+		displayController->printButtonValues(buttonValues);
+		ledController->setLedState(buttonValues);
+	}
 }
 
 void uiCallback(uint8_t step) {
