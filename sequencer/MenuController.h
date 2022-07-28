@@ -29,13 +29,20 @@ class MenuController
 		SequencerEngine* _sequencerEngine;
 		char _started[8] = "started";
 		char _stopped[8] = "stopped";
-		uint8_t _activeMenuIndex = 0;		
-		char *_menuItems[2][21] = { 
+		uint8_t _activeMenuIndex = 0;
+		char *_menuItems[9][21] = { 
 			{ "stopped              ", "bpm                  ", "step                 " }, 
-			{ "note                 ", "length               ", "velocity 100         " , "octave 0             ", "step                 " } 
+			{ "note 1               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 2               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 3               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 4               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 5               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 6               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 7               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " },
+			{ "note 8               ", "length               ", "velocity 100         " , "octave 0             ", "step                 " }
 		};
-		uint8_t const _numberOfMenuItems[2] = {3, 5};
-		int8_t _activeMenuItemIndex[2] = { 0, 0 };
+		uint8_t const _numberOfMenuItems[9] = {3, 5, 5, 5, 5, 5, 5, 5, 5};
+		int8_t _activeMenuItemIndex[9] = { 0 };
 		bool _isStarted = false;
 		bool _itemSelected = true;
 		void handleStartStop();

@@ -100,7 +100,14 @@ void rotaryMainButtonCallback() {
 
 void buttonCallback(unsigned long buttonValues) {
 	if (buttonValues > 128) {
-		if (!menuController->startMenu(1)) {
+		uint8_t menuIndex = 1;
+		for (int i = 7; i < 16; i++) {
+			if (bitRead(buttonValues, i)) {
+				menuIndex = i - 7;
+				break;
+			}
+		}
+		if (!menuController->startMenu(menuIndex)) {
 			menuController->cycleMenuPlus();
 		}
 	}
